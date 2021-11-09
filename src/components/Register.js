@@ -8,7 +8,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword, 
   onAuthStateChanged,  
-  signOut } from "firebase/auth"
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup
+ } from "firebase/auth"
 
 
 export default function Register() {
@@ -25,17 +28,18 @@ export default function Register() {
     const user = auth.currentUser;
 
     if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      // ...
+      
     } else {
       // No user is signed in.
     }
+
+
+
     const userCollectionRef = collection(db, "users");
 
-      onAuthStateChanged(auth, (userCurrent) => {
-          setCurrentUser(userCurrent)
-      })
+    onAuthStateChanged(auth, (userCurrent) => {
+        setCurrentUser(userCurrent)
+    })
 
     const register = async () => {
         await addDoc(userCollectionRef, {email: newUser, password: registerPassword})
