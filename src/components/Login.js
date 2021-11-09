@@ -50,6 +50,10 @@ const Login = () => {
     const logout = async() => {
         await signOut(auth);
     }
+
+    const deleteUser = async() => {
+        await auth.currentUser.delete();
+    }
     return (
         <div>
             <div>
@@ -63,6 +67,7 @@ const Login = () => {
                 <h3>Currently Logged In User: </h3>
                 {currentUser?.email}
                 <button onClick={logout}>Sign Out</button>
+                <button onClick={deleteUser}>Delete User</button>
             </div>
             
         </div>
