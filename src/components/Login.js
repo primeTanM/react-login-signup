@@ -34,11 +34,6 @@ const Login = () => {
             // ...
         });
     }
-
-    // const provider = new GoogleAuthProvider();
-    
-
-
     onAuthStateChanged(auth, (userCurrent) => {
         setCurrentUser(userCurrent)
     })
