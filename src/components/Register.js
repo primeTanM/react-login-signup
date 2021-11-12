@@ -37,6 +37,7 @@ export default function Register() {
         try {
           const user = await createUserWithEmailAndPassword(auth, newUser, registerPassword);
           await addDoc(userCollectionRef, {username: userName, email: newUser, password: registerPassword})
+          navigate("/login");
           console.log(user);
         } 
         catch(error) {
@@ -50,6 +51,7 @@ export default function Register() {
               window.alert(error.message)
             default:
               //do nothing
+
           }
         }
         
@@ -78,7 +80,7 @@ export default function Register() {
             <input type="email" placeholder="email..." onChange={(e) => setNewUser(e.target.value)}/>
             <input type="password" placeholder="Password..." onChange={(e) => setRegisterPassword(e.target.value)}/>
             <button type="submit" onClick={register}>Register User</button>
-            <p>Already a User? Click <button onClick={() => {navigate("/login")}} >here</button> to Login</p>
+            <p>Already a User? Click <button onClick={() => {navigate("/login")}}>here</button> to Login</p>
         </div>
 
       <div>
