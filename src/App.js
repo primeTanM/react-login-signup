@@ -1,10 +1,14 @@
-import React from "react";
+//react modules
+import React, { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+//authentication components
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
-import Navbar from "./components/Navbar";
 import PageNotFound from "./components/PageNotFound";
-import { Route, Routes, Link } from "react-router-dom";
+//todolist components
+import TodoApp from "./components/TodoApp";
+
 
 function App(){
   return(
@@ -14,9 +18,11 @@ function App(){
       <Route path='/login' element={<Login/>} />
       <Route path='/home' element={<Home/>} />
       <Route path='*' element={<PageNotFound/>} />
-    </Routes>
+      <Route path='/todo' element={<TodoApp />} />
+    </Routes> 
     </>
   )
 }
  
 export default App;
+
