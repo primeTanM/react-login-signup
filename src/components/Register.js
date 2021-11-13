@@ -1,14 +1,13 @@
 import React from 'react'
 import '../index.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom"; 
 import { db, auth } from "../firebase-config";
 import { collection, getDocs, addDoc, setDoc, doc, deleteDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth"
 
-
 export default function Register() {
-
+    const isMounted = useRef(true);
     const navigate = useNavigate();
     const[newUser, setNewUser] = useState(""); 
     const[userName, setUserName] = useState("");
@@ -31,27 +30,24 @@ export default function Register() {
     })
 
     const register = async () => {
-        // const userDocRef = doc(userCollectionRef, newUser)
-        // await setDoc(userDocRef, {username: userName, email: newUser, password: registerPassword})
-        
         try {
           const user = await createUserWithEmailAndPassword(auth, newUser, registerPassword);
           await addDoc(userCollectionRef, {username: userName, email: newUser, password: registerPassword})
-          navigate("/login");
+          navigate("/login"); 
           console.log(user);
         } 
         catch(error) {
           switch(error.code){
             case "auth/email-already-in-use":
-              window.alert("Email already registered");
+              window.alert("There is already an account with this email");
               break;
             case "auth/invalid-email":
             case "auth/user-disabled":
             case "auth/user-not-found":
               window.alert(error.message)
+              break;
             default:
               //do nothing
-
           }
         }
         
@@ -66,33 +62,34 @@ export default function Register() {
     useEffect(() => {
         const getUsers = async () => {
         const data = await getDocs(userCollectionRef);
-        setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id })))
+        if(isMounted.current){
+          setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
+        }
+        
+        return(() => {
+          isMounted.current = false;
+        })
         };
 
         getUsers();
     });
 
     return (    
-        <div>
+    <div className="container-1">
+      <div className="register-container">
         <h2>Register</h2>
-        <div>
-            <input type="text" placeholder="Your username..." onChange={(e) => setUserName(e.target.value)}/>
-            <input type="email" placeholder="email..." onChange={(e) => setNewUser(e.target.value)}/>
-            <input type="password" placeholder="Password..." onChange={(e) => setRegisterPassword(e.target.value)}/>
-            <button type="submit" onClick={register}>Register User</button>
-            <p>Already a User? Click <button onClick={() => {navigate("/login")}}>here</button> to Login</p>
-        </div>
+        <input type="text" placeholder="Your username..." onChange={(e) => setUserName(e.target.value)}/>
+        <input type="email" placeholder="email..." onChange={(e) => setNewUser(e.target.value)}/>
+        <input type="password" placeholder="Password..." onChange={(e) => setRegisterPassword(e.target.value)}/>
+        <button type="submit" onClick={register}>Register User</button>
+        <p>Already a User? Click <button onClick={() => {navigate("/login")}}>here</button> to Login</p>
+      </div>
 
-      <div>
+      {/* <div>
         <h3>Registerd Users: </h3>
         {users.map((user) => {
           return(
             <>
-              {/* <div>
-                <h4>{user.email}</h4>
-                <button>Update Details</button>
-                <button onClick={() => deleteUser(user.id)}>Delete User</button>
-              </div> */}
               <div key={user.id}>
                 <h4>{user.email}</h4>
                 <button>Update Details</button>
@@ -101,9 +98,16 @@ export default function Register() {
             </>
           )
         })}
-       </div>
+       </div> */}
         
     </div>
     )
 }
 
+
+
+/* <div>
+  <h4>{user.email}</h4>
+  <button>Update Details</button>
+  <button onClick={() => deleteUser(user.id)}>Delete User</button>
+</div> */

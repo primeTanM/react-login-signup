@@ -2,13 +2,14 @@ import React from "react";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import Navbar from "./components/Navbar";
 import PageNotFound from "./components/PageNotFound";
 import { Route, Routes, Link } from "react-router-dom";
 
 function App(){
   return(
     <>
-    <Routes>
+    <Routes>  
       <Route path='/' element={<Register/>} />
       <Route path='/login' element={<Login/>} />
       <Route path='/home' element={<Home/>} />
